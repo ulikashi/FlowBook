@@ -226,35 +226,10 @@
         background: #cbd5e1;
       }
 
-      .mockup-body {
-        padding: 1rem;
-        display: grid;
-        gap: 0.9rem;
-      }
-
-      .mockup-card {
-        border: 1px solid #bfdbfe;
-        background: #fff;
-        border-radius: 14px;
-        padding: 0.85rem;
-      }
-
-      .line {
-        height: 8px;
-        border-radius: 999px;
-        background: #dbeafe;
-      }
-
-      .line.wide {
-        width: 86%;
-      }
-
-      .line.mid {
-        width: 60%;
-      }
-
-      .line.short {
-        width: 38%;
+      .mockup-image {
+        width: 100%;
+        aspect-ratio: 16/10;
+        object-fit: cover;
       }
 
       /* How it works */
@@ -316,31 +291,13 @@
         aspect-ratio: 16/10;
         border-radius: 14px;
         border: 1px solid #bfdbfe;
-        background:
-          linear-gradient(145deg, rgba(37, 99, 235, 0.15), rgba(37, 99, 235, 0.03)),
-          repeating-linear-gradient(
-            90deg,
-            rgba(37, 99, 235, 0.1),
-            rgba(37, 99, 235, 0.1) 1px,
-            transparent 1px,
-            transparent 55px
-          ),
-          #fff;
-        position: relative;
         overflow: hidden;
       }
 
-      .shot-chip {
-        position: absolute;
-        top: 0.85rem;
-        left: 0.85rem;
-        font-size: 0.74rem;
-        font-weight: 700;
-        background: #fff;
-        color: var(--accent);
-        border: 1px solid #bfdbfe;
-        border-radius: 999px;
-        padding: 0.2rem 0.6rem;
+      .shot-visual img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
 
       .shot-caption {
@@ -660,20 +617,12 @@
               <span class="dot"></span>
               <span class="dot"></span>
             </div>
-            <div class="mockup-body">
-              <div class="mockup-card">
-                <div class="line wide"></div>
-                <div class="line mid" style="margin-top: 0.55rem"></div>
-              </div>
-              <div class="mockup-card">
-                <div class="line short"></div>
-                <div class="line wide" style="margin-top: 0.55rem"></div>
-                <div class="line mid" style="margin-top: 0.55rem"></div>
-              </div>
-              <div class="mockup-card">
-                <div class="line mid"></div>
-              </div>
-            </div>
+            <img
+              class="mockup-image"
+              src="assets/images/flowbook-hero-dashboard.png"
+              alt="Интерфейс FlowBook с календарём, метриками и графиком загрузки"
+              loading="eager"
+            />
           </div>
         </div>
       </section>
@@ -714,19 +663,19 @@
           <div class="shots-grid">
             <article class="shot">
               <div class="shot-visual">
-                <span class="shot-chip">Dashboard</span>
+                <img src="assets/images/flowbook-screen-calendar.png" alt="Скриншот календаря записей FlowBook" loading="lazy" />
               </div>
               <p class="shot-caption">Календарь записей</p>
             </article>
             <article class="shot">
               <div class="shot-visual">
-                <span class="shot-chip">Booking</span>
+                <img src="assets/images/flowbook-screen-client-page.png" alt="Скриншот клиентской страницы записи FlowBook" loading="lazy" />
               </div>
               <p class="shot-caption">Страница записи клиента</p>
             </article>
             <article class="shot">
               <div class="shot-visual">
-                <span class="shot-chip">Analytics</span>
+                <img src="assets/images/flowbook-screen-analytics.png" alt="Скриншот аналитики и загрузки команды в FlowBook" loading="lazy" />
               </div>
               <p class="shot-caption">Отчёты и загрузка команды</p>
             </article>
