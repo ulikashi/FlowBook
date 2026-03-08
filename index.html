@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FlowBook — Онлайн-запись для малого бизнеса</title>
+    <meta
+      name="description"
+      content="FlowBook — SaaS-сервис онлайн-записи для малого бизнеса: календарь, клиентская страница записи, автоматические напоминания и прозрачные тарифы."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --muted: #475569;
+        --line: #e2e8f0;
+        --accent: #2563eb;
+        --accent-dark: #1d4ed8;
+        --shadow: 0 12px 30px rgba(15, 23, 42, 0.09);
+        --radius: 18px;
+        --container: 1120px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Manrope", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 85% -10%, rgba(37, 99, 235, 0.1), transparent 40%),
+          radial-gradient(circle at 10% 0%, rgba(37, 99, 235, 0.08), transparent 35%),
+          var(--bg);
+        line-height: 1.55;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      .container {
+        width: min(100% - 2rem, var(--container));
+        margin-inline: auto;
+      }
+
+      .section {
+        padding: 4.5rem 0;
+      }
+
+      .section-title {
+        margin: 0 0 1rem;
+        font-size: clamp(1.75rem, 3.4vw, 2.7rem);
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+
+      .section-subtitle {
+        margin: 0;
+        color: var(--muted);
+        max-width: 62ch;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        padding: 0.78rem 1.25rem;
+        font-size: 0.95rem;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #fff;
+        box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
+      }
+
+      .btn-primary:hover {
+        background: var(--accent-dark);
+      }
+
+      .btn-secondary {
+        border-color: var(--line);
+        color: var(--text);
+        background: #fff;
+      }
+
+      .btn-secondary:hover {
+        border-color: #cbd5e1;
+      }
+
+      /* Header */
+      .site-header {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 20;
+        background: rgba(248, 250, 252, 0.85);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        min-height: 70px;
+      }
+
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-weight: 800;
+        color: var(--text);
+        text-decoration: none;
+      }
+
+      .logo-mark {
+        width: 30px;
+        aspect-ratio: 1;
+        border-radius: 9px;
+        background: linear-gradient(160deg, var(--accent), #60a5fa);
+      }
+
+      .nav-links {
+        display: none;
+        gap: 1rem;
+      }
+
+      .nav-links a {
+        color: var(--muted);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.92rem;
+      }
+
+      .nav-links a:hover {
+        color: var(--accent);
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      main {
+        padding-top: 74px;
+      }
+
+      /* Hero */
+      .hero {
+        padding-top: 3.2rem;
+      }
+
+      .hero-grid {
+        display: grid;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .hero-copy h1 {
+        margin: 0;
+        font-size: clamp(2rem, 7vw, 4.2rem);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+      }
+
+      .hero-copy p {
+        color: var(--muted);
+        font-size: clamp(1rem, 2.3vw, 1.2rem);
+        max-width: 52ch;
+        margin: 1.1rem 0 0;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.6rem;
+      }
+
+      .mockup {
+        background: linear-gradient(170deg, #eff6ff, #ffffff 45%, #eef2ff);
+        border: 1px solid #dbeafe;
+        border-radius: 24px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .mockup-topbar {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid #dbeafe;
+        background: #fff;
+      }
+
+      .dot {
+        width: 9px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #cbd5e1;
+      }
+
+      .mockup-body {
+        padding: 1rem;
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      .mockup-card {
+        border: 1px solid #bfdbfe;
+        background: #fff;
+        border-radius: 14px;
+        padding: 0.85rem;
+      }
+
+      .line {
+        height: 8px;
+        border-radius: 999px;
+        background: #dbeafe;
+      }
+
+      .line.wide {
+        width: 86%;
+      }
+
+      .line.mid {
+        width: 60%;
+      }
+
+      .line.short {
+        width: 38%;
+      }
+
+      /* How it works */
+      .steps-grid {
+        margin-top: 2rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .step {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 1.2rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .step:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow);
+      }
+
+      .step-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        background: linear-gradient(160deg, var(--accent), #60a5fa);
+        font-weight: 700;
+      }
+
+      .step h3 {
+        margin: 0.8rem 0 0.4rem;
+        font-size: 1.1rem;
+      }
+
+      .step p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      /* Screenshots */
+      .shots-grid {
+        margin-top: 2rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .shot {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 0.9rem;
+      }
+
+      .shot-visual {
+        aspect-ratio: 16/10;
+        border-radius: 14px;
+        border: 1px solid #bfdbfe;
+        background:
+          linear-gradient(145deg, rgba(37, 99, 235, 0.15), rgba(37, 99, 235, 0.03)),
+          repeating-linear-gradient(
+            90deg,
+            rgba(37, 99, 235, 0.1),
+            rgba(37, 99, 235, 0.1) 1px,
+            transparent 1px,
+            transparent 55px
+          ),
+          #fff;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .shot-chip {
+        position: absolute;
+        top: 0.85rem;
+        left: 0.85rem;
+        font-size: 0.74rem;
+        font-weight: 700;
+        background: #fff;
+        color: var(--accent);
+        border: 1px solid #bfdbfe;
+        border-radius: 999px;
+        padding: 0.2rem 0.6rem;
+      }
+
+      .shot-caption {
+        margin: 0.8rem 0 0;
+        font-weight: 600;
+      }
+
+      /* Pricing */
+      .pricing-grid {
+        margin-top: 2rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .price-card {
+        position: relative;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 1.3rem;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .price-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow);
+      }
+
+      .price-card.recommended {
+        border-color: #93c5fd;
+        box-shadow: 0 15px 34px rgba(37, 99, 235, 0.16);
+      }
+
+      .badge {
+        position: absolute;
+        top: 0.9rem;
+        right: 0.9rem;
+        font-size: 0.72rem;
+        border-radius: 999px;
+        background: #dbeafe;
+        color: #1e3a8a;
+        padding: 0.25rem 0.55rem;
+        font-weight: 700;
+      }
+
+      .price-card h3 {
+        margin: 0;
+        font-size: 1.3rem;
+      }
+
+      .price {
+        margin: 0.4rem 0 1rem;
+        font-weight: 800;
+        font-size: 2rem;
+        letter-spacing: -0.03em;
+      }
+
+      .price span {
+        font-size: 0.95rem;
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .price-features {
+        list-style: none;
+        margin: 0 0 1.1rem;
+        padding: 0;
+        display: grid;
+        gap: 0.5rem;
+        color: var(--muted);
+      }
+
+      .price-features li::before {
+        content: "• ";
+        color: var(--accent);
+        font-weight: 900;
+      }
+
+      .price-card .btn {
+        margin-top: auto;
+      }
+
+      /* FAQ */
+      .faq-list {
+        margin-top: 2rem;
+        display: grid;
+        gap: 0.8rem;
+      }
+
+      .faq-item {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+
+      .faq-question {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        text-align: left;
+        font: inherit;
+        font-weight: 700;
+        color: var(--text);
+        padding: 1rem 1.1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+      }
+
+      .faq-question::after {
+        content: "+";
+        color: var(--accent);
+      }
+
+      .faq-item.open .faq-question::after {
+        content: "−";
+      }
+
+      .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.25s ease;
+      }
+
+      .faq-answer p {
+        margin: 0;
+        padding: 0 1.1rem 1rem;
+        color: var(--muted);
+      }
+
+      /* Signup */
+      .signup {
+        padding-bottom: 5.2rem;
+      }
+
+      .signup-wrap {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 1.25rem;
+        box-shadow: var(--shadow);
+      }
+
+      .signup-copy p {
+        margin: 0.8rem 0 0;
+        color: var(--muted);
+      }
+
+      .signup-form {
+        margin-top: 1.2rem;
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .field {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .field label {
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .field input {
+        width: 100%;
+        padding: 0.72rem 0.82rem;
+        border-radius: 11px;
+        border: 1px solid #cbd5e1;
+        font: inherit;
+      }
+
+      .field input:focus {
+        outline: 0;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+      }
+
+      .error-text {
+        font-size: 0.82rem;
+        color: #b91c1c;
+        min-height: 1em;
+      }
+
+      .form-message {
+        margin-top: 0.65rem;
+        font-size: 0.92rem;
+        font-weight: 600;
+      }
+
+      .form-message.success {
+        color: #166534;
+      }
+
+      .form-message.error {
+        color: #b91c1c;
+      }
+
+      /* Footer */
+      .site-footer {
+        border-top: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .footer-row {
+        min-height: 76px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .footer-row a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      .footer-row a:hover {
+        text-decoration: underline;
+      }
+
+      @media (min-width: 700px) {
+        .section {
+          padding: 5.2rem 0;
+        }
+
+        .signup-wrap {
+          padding: 2rem;
+        }
+
+        .steps-grid,
+        .shots-grid,
+        .pricing-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (min-width: 950px) {
+        .nav-links,
+        .nav-cta {
+          display: flex;
+        }
+
+        .hero-grid {
+          grid-template-columns: 1.06fr 0.94fr;
+          gap: 2.5rem;
+        }
+
+        .steps-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .shots-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .pricing-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .signup-wrap {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1.7rem;
+          align-items: start;
+        }
+
+        .signup-form {
+          margin-top: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <a href="#top" class="logo">
+          <span class="logo-mark" aria-hidden="true"></span>
+          FlowBook
+        </a>
+        <nav class="nav-links" aria-label="Основная навигация">
+          <a href="#how">Как это работает</a>
+          <a href="#screens">Скриншоты</a>
+          <a href="#pricing">Тарифы</a>
+          <a href="#faq">FAQ</a>
+          <a href="#signup">Регистрация</a>
+        </nav>
+        <a class="btn btn-primary nav-cta" href="#signup">Начать бесплатно</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="section hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <h1>Онлайн‑запись для малого бизнеса без хаоса в расписании</h1>
+            <p>
+              FlowBook автоматизирует запись клиентов, напоминает о визитах и освобождает вам часы каждую неделю.
+              Меньше звонков, больше подтверждённых встреч.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#signup">Начать бесплатно</a>
+              <a class="btn btn-secondary" href="#screens">Посмотреть демо</a>
+            </div>
+          </div>
+          <div class="mockup" aria-label="Мокап интерфейса FlowBook">
+            <div class="mockup-topbar">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            <div class="mockup-body">
+              <div class="mockup-card">
+                <div class="line wide"></div>
+                <div class="line mid" style="margin-top: 0.55rem"></div>
+              </div>
+              <div class="mockup-card">
+                <div class="line short"></div>
+                <div class="line wide" style="margin-top: 0.55rem"></div>
+                <div class="line mid" style="margin-top: 0.55rem"></div>
+              </div>
+              <div class="mockup-card">
+                <div class="line mid"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="how">
+        <div class="container">
+          <h2 class="section-title">Как это работает</h2>
+          <p class="section-subtitle">Запустите онлайн‑запись за 15 минут без сложной настройки и лишней рутины.</p>
+          <div class="steps-grid">
+            <article class="step">
+              <div class="step-icon" aria-hidden="true">1</div>
+              <h3>Создайте аккаунт</h3>
+              <p>Зарегистрируйтесь и получите готовое рабочее пространство за минуту.</p>
+            </article>
+            <article class="step">
+              <div class="step-icon" aria-hidden="true">2</div>
+              <h3>Настройте услуги и расписание</h3>
+              <p>Добавьте услуги, длительность, цены и удобные слоты в календаре.</p>
+            </article>
+            <article class="step">
+              <div class="step-icon" aria-hidden="true">3</div>
+              <h3>Поделитесь ссылкой</h3>
+              <p>Отправьте клиентам персональную страницу записи через соцсети или сайт.</p>
+            </article>
+            <article class="step">
+              <div class="step-icon" aria-hidden="true">4</div>
+              <h3>Получайте онлайн‑записи</h3>
+              <p>Брони автоматически попадают в календарь, а напоминания уходят клиентам.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="screens">
+        <div class="container">
+          <h2 class="section-title">Смотрите, как выглядит FlowBook</h2>
+          <p class="section-subtitle">Минималистичный интерфейс, в котором вся запись видна на одном экране.</p>
+          <div class="shots-grid">
+            <article class="shot">
+              <div class="shot-visual">
+                <span class="shot-chip">Dashboard</span>
+              </div>
+              <p class="shot-caption">Календарь записей</p>
+            </article>
+            <article class="shot">
+              <div class="shot-visual">
+                <span class="shot-chip">Booking</span>
+              </div>
+              <p class="shot-caption">Страница записи клиента</p>
+            </article>
+            <article class="shot">
+              <div class="shot-visual">
+                <span class="shot-chip">Analytics</span>
+              </div>
+              <p class="shot-caption">Отчёты и загрузка команды</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="pricing">
+        <div class="container">
+          <h2 class="section-title">Прозрачные тарифы без сюрпризов</h2>
+          <p class="section-subtitle">Выберите план под ваш этап роста. Можно сменить тариф в любой момент.</p>
+          <div class="pricing-grid">
+            <article class="price-card">
+              <h3>Starter</h3>
+              <p class="price">$19 <span>/ месяц</span></p>
+              <ul class="price-features">
+                <li>До 2 сотрудников</li>
+                <li>Онлайн‑календарь записей</li>
+                <li>Брендированная страница записи</li>
+                <li>Email‑напоминания</li>
+                <li>Базовая аналитика</li>
+              </ul>
+              <a class="btn btn-secondary" href="#signup">Выбрать</a>
+            </article>
+            <article class="price-card recommended">
+              <span class="badge">Рекомендуем</span>
+              <h3>Pro</h3>
+              <p class="price">$49 <span>/ месяц</span></p>
+              <ul class="price-features">
+                <li>До 10 сотрудников</li>
+                <li>SMS и email‑напоминания</li>
+                <li>Онлайн‑предоплата</li>
+                <li>Интеграции с CRM</li>
+                <li>Глубокая аналитика</li>
+                <li>Приоритетная поддержка</li>
+              </ul>
+              <a class="btn btn-primary" href="#signup">Выбрать</a>
+            </article>
+            <article class="price-card">
+              <h3>Business</h3>
+              <p class="price">$99 <span>/ месяц</span></p>
+              <ul class="price-features">
+                <li>Неограниченная команда</li>
+                <li>Несколько филиалов</li>
+                <li>Роли и права доступа</li>
+                <li>Кастомные отчёты</li>
+                <li>SLA и персональный менеджер</li>
+                <li>API‑доступ</li>
+              </ul>
+              <a class="btn btn-secondary" href="#signup">Выбрать</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="faq">
+        <div class="container">
+          <h2 class="section-title">Частые вопросы</h2>
+          <div class="faq-list" id="faqList">
+            <article class="faq-item">
+              <button class="faq-question" type="button">Есть ли бесплатный пробный период?</button>
+              <div class="faq-answer">
+                <p>Да, у всех тарифов есть 14 дней бесплатного периода без привязки карты.</p>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" type="button">Подойдёт ли FlowBook для салона или клиники?</button>
+              <div class="faq-answer">
+                <p>Да, сервис подходит для бьюти, медицины, консультаций, фитнеса и других услуг по записи.</p>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" type="button">Можно ли подключить онлайн‑оплату?</button>
+              <div class="faq-answer">
+                <p>Да, в тарифах Pro и Business доступна предоплата и полная онлайн‑оплата услуг.</p>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" type="button">Сколько времени занимает запуск?</button>
+              <div class="faq-answer">
+                <p>В среднем 15–30 минут: регистрация, настройка услуг, публикация ссылки и приём первых заявок.</p>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" type="button">Можно ли перенести данные из другого сервиса?</button>
+              <div class="faq-answer">
+                <p>Да, команда поддержки поможет с импортом клиентов и расписания при переходе.</p>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" type="button">Что если мне нужно больше функций?</button>
+              <div class="faq-answer">
+                <p>Вы можете перейти на более высокий тариф в один клик, данные и настройки сохраняются.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section signup" id="signup">
+        <div class="container">
+          <div class="signup-wrap">
+            <div class="signup-copy">
+              <h2 class="section-title">Готовы попробовать FlowBook?</h2>
+              <p>
+                Запустите онлайн‑запись уже сегодня. Первые 14 дней бесплатно, отмена в любой момент без
+                обязательств.
+              </p>
+            </div>
+            <form class="signup-form" id="signupForm" novalidate>
+              <div class="field">
+                <label for="name">Имя</label>
+                <input id="name" name="name" type="text" autocomplete="name" required />
+                <span class="error-text" data-error-for="name"></span>
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email" required />
+                <span class="error-text" data-error-for="email"></span>
+              </div>
+              <div class="field">
+                <label for="business">Название бизнеса</label>
+                <input id="business" name="business" type="text" autocomplete="organization" required />
+                <span class="error-text" data-error-for="business"></span>
+              </div>
+              <button class="btn btn-primary" type="submit">Создать аккаунт</button>
+              <p id="formMessage" class="form-message" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <p>© 2026 FlowBook. Все права защищены.</p>
+        <a href="#" aria-label="Политика конфиденциальности">Политика конфиденциальности</a>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const faqList = document.getElementById("faqList");
+        const signupForm = document.getElementById("signupForm");
+        const formMessage = document.getElementById("formMessage");
+
+        if (faqList) {
+          faqList.addEventListener("click", function (event) {
+            const button = event.target.closest(".faq-question");
+            if (!button) return;
+
+            const item = button.closest(".faq-item");
+            const answer = item ? item.querySelector(".faq-answer") : null;
+            if (!item || !answer) return;
+
+            item.classList.toggle("open");
+            answer.style.maxHeight = item.classList.contains("open") ? answer.scrollHeight + "px" : "0";
+          });
+        }
+
+        function setError(fieldName, text) {
+          const errorEl = document.querySelector('[data-error-for="' + fieldName + '"]');
+          if (errorEl) errorEl.textContent = text;
+        }
+
+        function clearErrors() {
+          ["name", "email", "business"].forEach(function (field) {
+            setError(field, "");
+          });
+          formMessage.textContent = "";
+          formMessage.className = "form-message";
+        }
+
+        function validateEmail(email) {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+        }
+
+        if (signupForm) {
+          signupForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            clearErrors();
+
+            const name = signupForm.name.value.trim();
+            const email = signupForm.email.value.trim();
+            const business = signupForm.business.value.trim();
+
+            let hasError = false;
+
+            if (!name) {
+              setError("name", "Введите имя");
+              hasError = true;
+            }
+
+            if (!email) {
+              setError("email", "Введите email");
+              hasError = true;
+            } else if (!validateEmail(email)) {
+              setError("email", "Введите корректный email");
+              hasError = true;
+            }
+
+            if (!business) {
+              setError("business", "Введите название бизнеса");
+              hasError = true;
+            }
+
+            if (hasError) {
+              formMessage.textContent = "Проверьте поля формы и попробуйте снова.";
+              formMessage.classList.add("error");
+              return;
+            }
+
+            formMessage.textContent = "Готово! Демо-аккаунт скоро будет отправлен на вашу почту.";
+            formMessage.classList.add("success");
+            signupForm.reset();
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>
